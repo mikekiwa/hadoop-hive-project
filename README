@@ -1,0 +1,22 @@
+This file contains instructions on how to run the 2 Hive programs provided in this project. 
+
+An input file is needed in order to run both scripts. Here is the instruction on how to generate one: 
+- Run Python script randomDataGenerator.py. File input.tsv will be generated.
+  $ python randomDataGenerator.py > input.tsv
+
+An initialization script needs to be executed in order to create the underlying database and table structure for the 2 Hive programs below.
+- Run Hive script init.hql by providing your HDFS directory as part of the hiveconf parameter HDFS_LOC and the data input file name as part of the hiveconf parameter INPUT_FILE. Here, HDFS_LOC is set to /user/ince/input, INPUT_FILE is set to input.tsv
+  $ hive -hiveconf HDFS_LOC=/user/ince/input -hiveconf INPUT_FILE=input.tsv -f init.hql
+
+—- Hive Programs in this Project —-
+1. Most Popular Courses
+- If not already done, execute the initialization step described above. Then, run Hive program mostPopularCourses.hql by providing N as part of the hiveconf variable N. Here, N is set to 3. Output file mostPopularCoursesOutput.tsv will be generated.
+  $ hive -hiveconf N=3 -f mostPopularCourses.hql > mostPopularCoursesOutput.tsv
+
+
+2. Consumption Summary per Course
+-  If not already done, execute the initialization step described above. Then, run Hive program consumptionSummary.hql. 
+  Output file consumptionSummaryOutput.tsv will be generated in the second hive call. See consumptionSummary.hql for details on why the output file generation is executed as an additional step.
+  $ hive -f consumptionSummary.hql > consumptionSummaryOutput.tsv
+  $ hive -e 'SELECT * FROM videoDB.course_activity' > consumptionSummaryOutput.tsv
+   
